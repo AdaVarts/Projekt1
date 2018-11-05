@@ -158,7 +158,8 @@ void r() {
 }
 
 void k() {
-	if (fclose(f) != 0) {  }
+	if (f != NULL)
+		fclose(f);
 	if (drivers != NULL)
 		free(drivers);
 	system("pause");
