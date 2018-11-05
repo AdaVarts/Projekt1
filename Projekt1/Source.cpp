@@ -8,7 +8,7 @@ using namespace std;
 FILE* f;
 int count = 0;
 
-typedef struct {
+typedef struct driver_t {
 	char name[50];
 	char sex;
 	int birthday;
@@ -18,7 +18,7 @@ typedef struct {
 	char dateOfFine[10];
 } driver_t;
 
-driver_t* drivers = NULL;
+driver_t** drivers = NULL;
 
 void o() {
 	f = fopen("priestupky.txt", "r");
@@ -31,42 +31,47 @@ void o() {
 	f = fopen("priestupky.txt", "r");
 	
 	
-	if (drivers!=NULL)
-		free(drivers);
-	if (drivers = (driver_t*)malloc(sizeof(driver_t) * ((count+1)/8))) {
+	if (drivers != NULL) {
+		for (int i = 0; i < (count + 1) / 8; i++)
+			free(drivers[i]);
+	}
+	drivers = (driver_t**)malloc(sizeof(driver_t*));
+	for (int j = 0; j < (count + 1) / 8; j++)
+		drivers[j] = (driver_t*)malloc(sizeof(driver_t));
+	if (drivers != NULL) {
 		int i = 0;
-		for (int j = 0; j < (count+1)/8; j++)
-		{
-			while (fgets(str, 265, f)>0) {
-				i++;
-				char *pos = strrchr(str, '\n');
-				if (pos)
-					str[pos - str] = 0;
-				switch (i % 8) {
-				case 1:
-					strcpy(drivers[j].name, str);
-					break;
-				case 2:
-					drivers[j].sex = str[0];
-					break;
-				case 3:
-					drivers[j].birthday = atoi(str);
-					break;
-				case 4:
-					strcpy(drivers[j].plate, str);
-					break;
-				case 5:
-					drivers[j].offence = str[0];
-					break;
-				case 6:
-					drivers[j].sumOfFine = atoi(str);
-					break;
-				case 7:
-					strcpy(drivers[j].dateOfFine, str);
-					break;
-				default:
-					break;
-				}
+		int j = 0;
+		while (fgets(str, 265, f) > 0) {
+			i++;
+			if (i % 8 == 0)
+				j++;
+			char *pos = strrchr(str, '\n');
+			if (pos)
+				str[pos - str] = 0;
+			switch (i % 8) {
+			case 1:
+				strcpy(drivers[j]->name, str);
+				break;
+			case 2:
+				drivers[j]->sex = str[0];
+				break;
+			case 3:
+				drivers[j]->birthday = atoi(str);
+				break;
+			case 4:
+				strcpy(drivers[j]->plate, str);
+				break;
+			case 5:
+				drivers[j]->offence = str[0];
+				break;
+			case 6:
+				drivers[j]->sumOfFine = atoi(str);
+				break;
+			case 7:
+				strcpy(drivers[j]->dateOfFine, str);
+				break;
+			default:
+				break;
 			}
 		}
 		
@@ -79,13 +84,13 @@ void o() {
 void v() {
 	if (drivers != NULL) {
 		for (int i = 0; i < (count + 1) / 8; i++) {
-			printf("meno priezvisko: %s\n", drivers[i].name);
-			printf("pohlavie: %c\n", drivers[i].sex);
-			printf("rok narodenia: %d\n", drivers[i].birthday);
-			printf("SPZ: %s", drivers[i].plate);
-			printf("typ priestupku: %d\n", drivers[i].offence);
-			printf("vyska pokuty: %d\n", drivers[i].sumOfFine);
-			printf("datum priestupku: %s\n\n", drivers[i].dateOfFine);
+			printf("meno priezvisko: %s\n", drivers[i]->name);
+			printf("pohlavie: %c\n", drivers[i]->sex);
+			printf("rok narodenia: %d\n", drivers[i]->birthday);
+			printf("SPZ: %s", drivers[i]->plate);
+			printf("typ priestupku: %d\n", drivers[i]->offence);
+			printf("vyska pokuty: %d\n", drivers[i]->sumOfFine);
+			printf("datum priestupku: %s\n\n", drivers[i]->dateOfFine);
 		}
 	}
 }
@@ -102,11 +107,11 @@ void x() {
 	for (int i = 0; i < (count+1)/8; i++)
 	{
 		char str[5];
-		strncpy(str, drivers[i].dateOfFine, 4);
+		strncpy(str, drivers[i]->dateOfFine, 4);
 		if (atoi(str) == year) {
-			printf("%s\n", drivers[i].name);
-			printf("%s\n", drivers[i].plate);
-			printf("%s\n", drivers[i].dateOfFine);
+			printf("%s\n", drivers[i]->name);
+			printf("%s\n", drivers[i]->plate);
+			printf("%s\n", drivers[i]->dateOfFine);
 		}
 	}
 }
@@ -117,10 +122,10 @@ void p() {
 		{
 			char str[8];
 			for (int j = 0; j < 7; j++)
-				str[j] = drivers[i].plate[6 - j];
+				str[j] = drivers[i]->plate[6 - j];
 			str[7] = '\0';
-			if (strcmp(str, drivers[i].plate) == 0) {
-				printf("%s %s\n", drivers[i].name, drivers[i].plate);
+			if (strcmp(str, drivers[i]->plate) == 0) {
+				printf("%s %s\n", drivers[i]->name, drivers[i]->plate);
 			}
 		}
 	}
@@ -141,15 +146,15 @@ void r() {
 		{
 			char str[5];
 			char str2[3];
-			strncpy(str, drivers[i].dateOfFine, 4);
-			str2[0] = drivers[i].dateOfFine[4];
-			str2[1] = drivers[i].dateOfFine[5];
+			strncpy(str, drivers[i]->dateOfFine, 4);
+			str2[0] = drivers[i]->dateOfFine[4];
+			str2[1] = drivers[i]->dateOfFine[5];
 			str2[2] = '\0';
 			if (atoi(str) == year && atoi(str2) == month) {
-				if (drivers[i].offence == 1)
-					odmena += drivers[i].sumOfFine*0.052;
-				else if (drivers[i].offence == 0)
-					odmena += drivers[i].sumOfFine*0.038;
+				if (drivers[i]->offence == 1)
+					odmena += drivers[i]->sumOfFine*0.052;
+				else if (drivers[i]->offence == 0)
+					odmena += drivers[i]->sumOfFine*0.038;
 			}
 		}
 		if (odmena != 0)
@@ -161,7 +166,8 @@ void k() {
 	if (f != NULL)
 		fclose(f);
 	if (drivers != NULL)
-		free(drivers);
+		for (int i = 0; i < (count + 1) / 8; i++)
+			free(drivers[i]);
 	system("pause");
 	exit(0);
 }
