@@ -97,24 +97,24 @@ void v() {
 }
 
 void x() {
-	struct tm *ptr;
-	time_t lt;
-
-	lt = time(NULL);
-	ptr = localtime(&lt);
-	
-	int year = ptr->tm_year + 1900;
+	char *str = (char*)malloc(9);
+	scanf("%8s", str);
+	char year[5];
+	strncpy(year, str, 4);
+	year[4] = '\0';
 
 	for (int i = 0; i < count; i++)
 	{
-		char str[5];
-		strncpy(str, drivers[i]->dateOfFine, 4);
-		if (atoi(str) == year) {
+		char str1[5];
+		strncpy(str1, drivers[i]->dateOfFine, 4);
+		str1[4] = '\0';
+		if (strcmp(str1, year) == 0) {
 			printf("%s\n", drivers[i]->name);
 			printf("%s\n", drivers[i]->plate);
 			printf("%s\n", drivers[i]->dateOfFine);
 		}
 	}
+	printf("\n");
 }
 
 void p() {
