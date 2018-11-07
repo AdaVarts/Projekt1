@@ -18,9 +18,15 @@ typedef struct driver_t {
 	char dateOfFine[10];
 } driver_t;
 
-driver_t** drivers = NULL;
 
-void o() {
+
+driver_t** o(driver_t** drivers) {
+	if (drivers != NULL) {
+		for (int i = 0; i < count; i++)
+			free(drivers[i]);
+	}
+	drivers = (driver_t**)malloc(sizeof(driver_t*));
+
 	f = fopen("priestupky.txt", "r");
 	int j = 0;
 	char str[265];
@@ -30,13 +36,7 @@ void o() {
 	count = (j + 1) / 8;
 	fclose(f);
 	f = fopen("priestupky.txt", "r");
-	
-	
-	if (drivers != NULL) {
-		for (int i = 0; i < count; i++)
-			free(drivers[i]);
-	}
-	drivers = (driver_t**)malloc(sizeof(driver_t*));
+
 	for (int j = 0; j < count; j++)
 		drivers[j] = (driver_t*)malloc(sizeof(driver_t));
 	if (drivers != NULL) {
@@ -80,15 +80,16 @@ void o() {
 	else {
 		printf("Pole nie je naplnene");
 	}
+	return drivers;
 }
 
-void v() {
+void v(driver_t** drivers) {
 	if (drivers != NULL) {
 		for (int i = 0; i < count; i++) {
 			printf("meno priezvisko: %s\n", drivers[i]->name);
 			printf("pohlavie: %c\n", drivers[i]->sex);
 			printf("rok narodenia: %d\n", drivers[i]->birthday);
-			printf("SPZ: %s", drivers[i]->plate);
+			printf("SPZ: %s\n", drivers[i]->plate);
 			printf("typ priestupku: %d\n", drivers[i]->offence);
 			printf("vyska pokuty: %d\n", drivers[i]->sumOfFine);
 			printf("datum priestupku: %s\n\n", drivers[i]->dateOfFine);
@@ -96,7 +97,7 @@ void v() {
 	}
 }
 
-void x() {
+void x(driver_t** drivers) {
 	char *str = (char*)malloc(9);
 	scanf("%8s", str);
 	char year[5];
@@ -117,7 +118,7 @@ void x() {
 	printf("\n");
 }
 
-void p() {
+void p(driver_t** drivers) {
 	if (drivers != NULL) {
 		for (int i = 0; i < count; i++)
 		{
@@ -132,7 +133,7 @@ void p() {
 	}
 }
 
-void r() {
+void r(driver_t** drivers) {
 	if (drivers != NULL) {
 		
 		char *str;
@@ -168,40 +169,38 @@ void r() {
 	}
 }
 
-/*void a() {
+driver_t** a(driver_t** drivers) {
 	if (drivers == NULL) {
 		drivers = (driver_t**)malloc(sizeof(driver_t*));
 		drivers[0] = (driver_t*)malloc(sizeof(driver_t));
-		count++;
 	}
 	else {
-		driver_t** drivers1 = (driver_t**)malloc(sizeof(driver_t*));
-		for (int i = 0; i < count + 1; i++) {
-			drivers1[i] = (driver_t*)malloc(sizeof(driver_t));
-			if (i != count) {
-				strcpy(drivers1[i]->name, drivers[i]->name);
-				drivers1[i]->sex = drivers[i]->sex;
-				drivers1[i]->birthday = drivers[i]->birthday;
-				strcpy(drivers1[i]->plate, drivers[i]->plate);
-				drivers1[i]->offence = drivers[i]->offence;
-				drivers1[i]->sumOfFine = drivers[i]->sumOfFine;
-				strcpy(drivers1[i]->dateOfFine, drivers[i]->dateOfFine);
-
-				free(drivers[i]);
-			}
-		}
-		count++;
+		drivers[count] = (driver_t*)malloc(sizeof(driver_t));
 	}
-	scanf_s("%s", drivers[count - 1]->name);
-	scanf_s("%c", drivers[count - 1]->sex);
-	scanf_s("%d", drivers[count - 1]->birthday);
-	scanf_s("%s", drivers[count - 1]->plate);
-	scanf_s("%d", drivers[count - 1]->offence);
-	scanf_s("%d", drivers[count - 1]->sumOfFine);
-	scanf_s("%s", drivers[count - 1]->dateOfFine);
-}*/
+	char *str = (char*)malloc(50);
+	getchar();
+	char c;
+	int i = 0;
+	while ((c = getchar()) != '\n') str[i++] = c;
+	str[i] = '\0';
+	strncpy(drivers[count]->name, str, 50);
+	scanf("%s", str);
+	drivers[count]->sex = str[0];
+	scanf("%s", str);
+	drivers[count]->birthday = atoi(str);
+	scanf("%s", str);
+	strcpy(drivers[count]->plate, str);
+	scanf("%s", str);
+	drivers[count]->offence = str[0];
+	scanf("%s", str);
+	drivers[count]->sumOfFine = atoi(str);
+	scanf("%s", str);
+	strcpy(drivers[count]->dateOfFine, str);
+	count++;
+	return drivers;
+}
 
-void k() {
+void k(driver_t** drivers) {
 	if (f != NULL)
 		fclose(f);
 	if (drivers != NULL)
@@ -212,30 +211,31 @@ void k() {
 }
 
 int main() {
+	driver_t** drivers = NULL;
 	char c;
 	while (true) {
 		scanf_s("%c", &c);
 		switch (c) {
 		case 'o':
-			o();
+			drivers = o(drivers);
 			break;
 		case 'r':
-			r();
+			r(drivers);
 			break;
 		case 'k':
-			k();
+			k(drivers);
 			break;
 		case 'x':
-			x();
+			x(drivers);
 			break;
 		case 'p':
-			p();
+			p(drivers);
 			break;
 		case 'v':
-			v();
+			v(drivers);
 			break;
 		case 'a':
-			//a();
+			drivers = a(drivers);
 			break;
 		default:
 			break;
