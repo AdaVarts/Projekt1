@@ -197,6 +197,16 @@ driver_t** a(driver_t** drivers) {
 	scanf("%s", str);
 	strcpy(drivers[count]->dateOfFine, str);
 	count++;
+
+	for (int k = 1; k < count; k++)
+		for (int j = 0; j < count - k; j++)
+			if (strcmp(drivers[j]->name, drivers[j + 1]->name) > 0) {
+				driver_t *driverTemp = (driver_t*)malloc(sizeof(driver_t));
+				driverTemp = drivers[j];
+				drivers[j] = drivers[j + 1];
+				drivers[j + 1] = driverTemp;
+			}
+
 	return drivers;
 }
 
