@@ -25,58 +25,60 @@ driver_t** o(driver_t** drivers) {
 	}
 	drivers = (driver_t**)malloc(sizeof(driver_t*));
 
-	f = fopen("priestupky.txt", "r");
-	int j = 0;
 	char str[265];
-	while (fgets(str, 265, f)>0) {
-		j++;
-	}
-	count = j / 8;
-	fclose(f);
-	f = fopen("priestupky.txt", "r");
-
-	for (int j = 0; j < count; j++)
-		drivers[j] = (driver_t*)malloc(sizeof(driver_t));
-	if (drivers != NULL) {
-		int i = 0;
+	if ((f = fopen("priestupky.txt", "r")) != NULL) {
 		int j = 0;
 		while (fgets(str, 265, f) > 0) {
-			i++;
-			if (i % 8 == 0)
-				j++;
-			char *pos = strrchr(str, '\n');
-			if (pos)
-				str[pos - str] = 0;
-			switch (i % 8) {
-			case 1:
-				strcpy(drivers[j]->name, str);
-				break;
-			case 2:
-				drivers[j]->sex = str[0];
-				break;
-			case 3:
-				drivers[j]->birthday = atoi(str);
-				break;
-			case 4:
-				strcpy(drivers[j]->plate, str);
-				break;
-			case 5:
-				drivers[j]->offence = str[0];
-				break;
-			case 6:
-				drivers[j]->sumOfFine = atoi(str);
-				break;
-			case 7:
-				strcpy(drivers[j]->dateOfFine, str);
-				break;
-			default:
-				break;
-			}
+			j++;
 		}
-		
+		count = j / 8;
+		fclose(f);
 	}
-	else {
-		printf("Pole nie je naplnene");
+	if ((f = fopen("priestupky.txt", "r")) != NULL) {
+
+		for (int j = 0; j < count; j++)
+			drivers[j] = (driver_t*)malloc(sizeof(driver_t));
+		if (drivers != NULL) {
+			int i = 0;
+			int j = 0;
+			while (fgets(str, 265, f) > 0) {
+				i++;
+				if (i % 8 == 0)
+					j++;
+				char *pos = strrchr(str, '\n');
+				if (pos)
+					str[pos - str] = 0;
+				switch (i % 8) {
+				case 1:
+					strcpy(drivers[j]->name, str);
+					break;
+				case 2:
+					drivers[j]->sex = str[0];
+					break;
+				case 3:
+					drivers[j]->birthday = atoi(str);
+					break;
+				case 4:
+					strcpy(drivers[j]->plate, str);
+					break;
+				case 5:
+					drivers[j]->offence = str[0];
+					break;
+				case 6:
+					drivers[j]->sumOfFine = atoi(str);
+					break;
+				case 7:
+					strcpy(drivers[j]->dateOfFine, str);
+					break;
+				default:
+					break;
+				}
+			}
+
+		}
+		else {
+			printf("Pole nie je naplnene");
+		}
 	}
 	return drivers;
 }
@@ -113,7 +115,6 @@ void x(driver_t** drivers) {
 			printf("%s\n", drivers[i]->dateOfFine);
 		}
 	}
-	printf("\n");
 }
 
 void p(driver_t** drivers) {
