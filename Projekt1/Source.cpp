@@ -31,7 +31,7 @@ driver_t** o(driver_t** drivers) {
 	while (fgets(str, 265, f)>0) {
 		j++;
 	}
-	count = (j + 1) / 8;
+	count = j / 8;
 	fclose(f);
 	f = fopen("priestupky.txt", "r");
 
