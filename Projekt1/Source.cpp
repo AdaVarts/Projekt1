@@ -62,7 +62,10 @@ driver_t** o(driver_t** drivers) {
 					strcpy(drivers[j]->plate, str);
 					break;
 				case 5:
-					drivers[j]->offence = str[0];
+					if (str[0] == 48)
+						drivers[j]->offence = false;
+					else
+						drivers[j]->offence = true;
 					break;
 				case 6:
 					drivers[j]->sumOfFine = atoi(str);
