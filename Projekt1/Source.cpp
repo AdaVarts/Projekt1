@@ -18,8 +18,6 @@ typedef struct driver_t {
 	char dateOfFine[10];
 } driver_t;
 
-
-
 driver_t** o(driver_t** drivers) {
 	if (drivers != NULL) {
 		for (int i = 0; i < count; i++)
