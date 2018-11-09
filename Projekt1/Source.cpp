@@ -114,10 +114,11 @@ void x(driver_t** drivers, int* count) {
 		char str1[5];
 		strncpy(str1, drivers[i]->dateOfFine, 4);
 		str1[4] = '\0';
-		if (strcmp(str1, year) == 0) {
+		if (strcmp(str1, year) == 0 && drivers[i]->offence == false) {
 			printf("%s\n", drivers[i]->name);
 			printf("%s\n", drivers[i]->plate);
 			printf("%s\n", drivers[i]->dateOfFine);
+			printf("\n");
 		}
 	}
 }
@@ -204,7 +205,7 @@ driver_t** a(driver_t** drivers, int* count) {
 	drivers[*count]->sumOfFine = atoi(str);
 	scanf("%s", str);
 	strcpy(drivers[*count]->dateOfFine, str);
-	count++;
+	(*count)++;
 
 	//bubble sorting by alphabet
 	for (int k = 1; k < *count; k++) 
@@ -224,9 +225,11 @@ void k(driver_t** drivers, FILE**f, int* count) {
 	if (*f != NULL) 
 		fclose(*f); 
 	//array cleaning
-	if (drivers != NULL) 
-		for (int i = 0; i < *count; i++) 
-			free(drivers[i]); 
+	if (drivers != NULL) {
+		for (int i = 0; i < *count; i++)
+			free(drivers[i]);
+		*count = 0;
+	}
 	system("pause");
 	exit(0);
 }
