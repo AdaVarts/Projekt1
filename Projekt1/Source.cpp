@@ -115,9 +115,9 @@ void x(driver_t** drivers, int* count) {
 		strncpy(str1, drivers[i]->dateOfFine, 4);
 		str1[4] = '\0';
 		if (strcmp(str1, year) == 0 && drivers[i]->offence == false) {
-			printf("%s\n", drivers[i]->name);
-			printf("%s\n", drivers[i]->plate);
-			printf("%s\n", drivers[i]->dateOfFine);
+			printf("meno priezvisko: %s\n", drivers[i]->name);
+			printf("SPZ: %s\n", drivers[i]->plate);
+			printf("datum priestupku: %s\n", drivers[i]->dateOfFine);
 			printf("\n");
 		}
 	}
