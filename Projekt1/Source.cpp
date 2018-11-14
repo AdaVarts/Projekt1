@@ -221,6 +221,116 @@ driver_t** a(driver_t** drivers, int* count) {
 	return drivers;
 }
 
+//function for Test2 c(n)
+driver_t** n(driver_t** drivers, int* count) {
+	if (drivers != NULL) {
+		int n = 0;
+		char strn[5];
+		scanf("%s", strn);
+		n = atoi(strn);
+		char str[9];
+		scanf("%s", str);
+		char spz1[3] = { str[0], str[1], '\0' };
+		for (int i = 0; i < *count; i++)
+		{
+			char spz[3] = { drivers[i]->plate[0], drivers[i]->plate[1], '\0' };
+			if (drivers[i]->sumOfFine < n && strcmp(spz1, spz) == 0) {
+				for (int j = i; j < *count - 1; j++)
+				{
+					strcpy(drivers[j]->name, drivers[j + 1]->name);
+					drivers[j]->sex = drivers[j + 1]->sex;
+					drivers[j]->birthday = drivers[j + 1]->birthday;
+					strcpy(drivers[j]->plate, drivers[j + 1]->plate);
+					drivers[j]->offence = drivers[j + 1]->offence;
+					drivers[j]->sumOfFine = drivers[j + 1]->sumOfFine;
+					strcpy(drivers[j]->dateOfFine, drivers[j + 1]->dateOfFine);
+				}
+				free(drivers[*count - 1]);
+				(*count)--;
+			}
+		}
+	}
+	printf("\n");
+	return drivers;
+}
+
+//function for Test2 s(h)
+void s(driver_t** drivers, int* count) {
+	if (drivers != NULL) {
+		char *x;
+		int *amount;
+		amount = (int*)malloc(2 * sizeof(int));
+		x = (char*)malloc(27 * sizeof(char));
+		x[0] = drivers[0]->plate[0];
+		amount[0] = 0;
+		int length = 1;
+		for (int i = 0; i < *count; i++)
+		{
+			bool flag1 = false, flag2 = false, flag3 = false;
+			for (int j = 0; j < length; j++)
+			{
+				if (x[j] == drivers[i]->plate[0]) {
+					amount[j]++;
+					flag1 = true;
+				}
+				if (x[j] == drivers[i]->plate[1]) {
+					amount[j]++;
+					flag2 = true;
+				}
+				if (drivers[i]->plate[0] == drivers[i]->plate[1]) {
+					flag2 = true;
+					flag3 = true;
+				}
+			}
+			if (!flag1) {
+				realloc(x, ++length);
+				x[length - 1] = drivers[i]->plate[0];
+				int *pa = (int*)malloc((length + 1) * sizeof(int));
+				for (int k = 0; k < length - 1; k++)
+					pa[k] = amount[k];
+				pa[length - 1] = 1;
+				if (flag3)
+					pa[length - 1]++;
+				free(amount);
+				amount = (int*)malloc((length + 1) * sizeof(int));
+				for (int k = 0; k < length; k++)
+					amount[k] = pa[k];
+				free(pa);
+			}
+			if (!flag2) {
+				realloc(x, ++length);
+				x[length - 1] = drivers[i]->plate[1];
+				int *pa = (int*)malloc((length + 1) * sizeof(int));
+				for (int k = 0; k < length - 1; k++)
+					pa[k] = amount[k];
+				pa[length - 1] = 1;
+				free(amount);
+				amount = (int*)malloc((length + 1) * sizeof(int));
+				for (int k = 0; k < length; k++)
+					amount[k] = pa[k];
+				free(pa);
+			}
+		}
+
+		//bubble sorting by alphabet
+		for (int k = 1; k < length; k++)
+			for (int j = 0; j < length - k; j++)
+				if (x[j]>x[j + 1]) {
+					char t = x[j];
+					x[j] = x[j + 1];
+					x[j + 1] = t;
+				}
+
+		for (int i = 0; i < length; i++)
+		{
+			printf("%c:%d\n", x[i], amount[i]);
+		}
+		printf("\n");
+		free(x);
+		free(amount);
+	}
+}
+
 void k(driver_t** drivers, FILE**f, int* count) {
 	//file closing
 	if (*f != NULL) 
@@ -263,6 +373,12 @@ int main() {
 			break;
 		case 'a':
 			drivers = a(drivers, &count);
+			break;
+		case 'c':
+			drivers = n(drivers, &count);
+			break;
+		case 's':
+			s(drivers, &count);
 			break;
 		default:
 			break;
