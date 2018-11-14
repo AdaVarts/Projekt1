@@ -220,6 +220,39 @@ driver_t** a(driver_t** drivers, int* count) {
 	return drivers;
 }
 
+//function for Test2 c(n)
+driver_t** n(driver_t** drivers, int* count) {
+	if (drivers != NULL) {
+		int n = 0;
+		char strn[5];
+		scanf("%s", strn);
+		n = atoi(strn);
+		char str[9];
+		scanf("%s", str);
+		char spz1[3] = { str[0], str[1], '\0' };
+		for (int i = 0; i < *count; i++)
+		{
+			char spz[3] = { drivers[i]->plate[0], drivers[i]->plate[1], '\0' };
+			if (drivers[i]->sumOfFine < n && strcmp(spz1, spz) == 0) {
+				for (int j = i; j < *count - 1; j++)
+				{
+					strcpy(drivers[j]->name, drivers[j + 1]->name);
+					drivers[j]->sex = drivers[j + 1]->sex;
+					drivers[j]->birthday = drivers[j + 1]->birthday;
+					strcpy(drivers[j]->plate, drivers[j + 1]->plate);
+					drivers[j]->offence = drivers[j + 1]->offence;
+					drivers[j]->sumOfFine = drivers[j + 1]->sumOfFine;
+					strcpy(drivers[j]->dateOfFine, drivers[j + 1]->dateOfFine);
+				}
+				free(drivers[*count - 1]);
+				(*count)--;
+			}
+		}
+	}
+	printf("\n");
+	return drivers;
+}
+
 void k(driver_t** drivers, FILE**f, int* count) {
 	//file closing
 	if (*f != NULL) 
