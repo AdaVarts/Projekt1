@@ -296,6 +296,9 @@ int main() {
 		case 'a':
 			drivers = a(drivers, &count);
 			break;
+		case 'c':
+			drivers = n(drivers, &count);
+			break;
 		default:
 			break;
 		}
