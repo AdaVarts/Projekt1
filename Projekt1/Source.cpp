@@ -1,7 +1,5 @@
 //Yelyzaveta Klysa 99411
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "Header.h"
 
 //structure
 typedef struct driver_t {
