@@ -12,10 +12,10 @@ typedef struct driver_t {
 	char dateOfFine[10];
 } driver_t;
 
-driver_t** o(driver_t** drivers, FILE** f, int* count) {
+driver_t** o(driver_t** drivers, FILE** f, int* countDrivers) {
 	//cleaning array if it exists
 	if (drivers != NULL) {
-		for (int i = 0; i < *count; i++)
+		for (int i = 0; i < *countDrivers; i++)
 			free(drivers[i]);
 	}
 	//creating a new pointer on array
@@ -28,13 +28,13 @@ driver_t** o(driver_t** drivers, FILE** f, int* count) {
 		while (fgets(str, 265, *f) > 0) {
 			j++;
 		}
-		*count = j / 8;
+		*countDrivers = j / 8;
 		fclose(*f);
 	}
 	
 	if ((*f = fopen("priestupky.txt", "r")) != NULL) {
 		//creating a new array
-		for (int j = 0; j < *count; j++)
+		for (int j = 0; j < *countDrivers; j++)
 			drivers[j] = (driver_t*)malloc(sizeof(driver_t));
 		//getting values from file
 		if (drivers != NULL) {
@@ -85,10 +85,10 @@ driver_t** o(driver_t** drivers, FILE** f, int* count) {
 	return drivers;
 }
 
-void v(driver_t** drivers, int* count) {
+void v(driver_t** drivers, int* countDrivers) {
 	if (drivers != NULL) {
 		//printing all drivers
-		for (int i = 0; i < *count; i++) {
+		for (int i = 0; i < *countDrivers; i++) {
 			printf("meno priezvisko: %s\n", drivers[i]->name);
 			printf("pohlavie: %c\n", drivers[i]->sex);
 			printf("rok narodenia: %d\n", drivers[i]->birthday);
@@ -100,7 +100,7 @@ void v(driver_t** drivers, int* count) {
 	}
 }
 
-void x(driver_t** drivers, int* count) {
+void x(driver_t** drivers, int* countDrivers) {
 	//getting year
 	char *str = (char*)malloc(9);
 	scanf("%8s", str);
@@ -108,7 +108,7 @@ void x(driver_t** drivers, int* count) {
 	strncpy(year, str, 4);
 	year[4] = '\0';
 
-	for (int i = 0; i < *count; i++)
+	for (int i = 0; i < *countDrivers; i++)
 	{
 		char str1[5];
 		strncpy(str1, drivers[i]->dateOfFine, 4);
@@ -122,9 +122,9 @@ void x(driver_t** drivers, int* count) {
 	}
 }
 
-void p(driver_t** drivers, int* count) {
+void p(driver_t** drivers, int* countDrivers) {
 	if (drivers != NULL) {
-		for (int i = 0; i < *count; i++)
+		for (int i = 0; i < *countDrivers; i++)
 		{
 			//getting reverse string of 'plate license'
 			char str[8];
@@ -139,7 +139,7 @@ void p(driver_t** drivers, int* count) {
 	}
 }
 
-void r(driver_t** drivers, int* count) {
+void r(driver_t** drivers, int* countDrivers) {
 	if (drivers != NULL) {
 		//getting year and month
 		char *str;
@@ -154,7 +154,7 @@ void r(driver_t** drivers, int* count) {
 		month[2] = '\0';
 
 		double odmena = 0;
-		for (int i = 0; i < *count; i++)
+		for (int i = 0; i < *countDrivers; i++)
 		{
 			char str1[5];
 			char str2[3];
@@ -175,7 +175,7 @@ void r(driver_t** drivers, int* count) {
 	}
 }
 
-driver_t** a(driver_t** drivers, int* count) {
+driver_t** a(driver_t** drivers, int* countDrivers) {
 	//creating new array if there is no previous
 	if (drivers == NULL) {
 		drivers = (driver_t**)malloc(sizeof(driver_t*));
@@ -183,7 +183,7 @@ driver_t** a(driver_t** drivers, int* count) {
 	}
 	//incremening previous if it exists
 	else {
-		drivers[*count] = (driver_t*)malloc(sizeof(driver_t));
+		drivers[*countDrivers] = (driver_t*)malloc(sizeof(driver_t));
 	}
 	char *str = (char*)malloc(50);
 	getchar();
@@ -191,24 +191,24 @@ driver_t** a(driver_t** drivers, int* count) {
 	int i = 0;
 	while ((c = getchar()) != '\n') str[i++] = c;
 	str[i] = '\0';
-	strncpy(drivers[*count]->name, str, 50);
+	strncpy(drivers[*countDrivers]->name, str, 50);
 	scanf("%s", str);
-	drivers[*count]->sex = str[0];
+	drivers[*countDrivers]->sex = str[0];
 	scanf("%s", str);
-	drivers[*count]->birthday = atoi(str);
+	drivers[*countDrivers]->birthday = atoi(str);
 	scanf("%s", str);
-	strcpy(drivers[*count]->plate, str);
+	strcpy(drivers[*countDrivers]->plate, str);
 	scanf("%s", str);
-	drivers[*count]->offence = str[0];
+	drivers[*countDrivers]->offence = str[0];
 	scanf("%s", str);
-	drivers[*count]->sumOfFine = atoi(str);
+	drivers[*countDrivers]->sumOfFine = atoi(str);
 	scanf("%s", str);
-	strcpy(drivers[*count]->dateOfFine, str);
-	(*count)++;
+	strcpy(drivers[*countDrivers]->dateOfFine, str);
+	(*countDrivers)++;
 
 	//bubble sorting by alphabet
-	for (int k = 1; k < *count; k++) 
-		for (int j = 0; j < *count - k; j++)
+	for (int k = 1; k < *countDrivers; k++) 
+		for (int j = 0; j < *countDrivers - k; j++)
 			if (strcmp(drivers[j]->name, drivers[j + 1]->name) > 0) {
 				driver_t *driverTemp = (driver_t*)malloc(sizeof(driver_t));
 				driverTemp = drivers[j];
@@ -220,7 +220,7 @@ driver_t** a(driver_t** drivers, int* count) {
 }
 
 //function for Test2 c(n)
-driver_t** n(driver_t** drivers, int* count) {
+driver_t** n(driver_t** drivers, int* countDrivers) {
 	if (drivers != NULL) {
 		int n = 0;
 		char strn[5];
@@ -229,11 +229,11 @@ driver_t** n(driver_t** drivers, int* count) {
 		char str[9];
 		scanf("%s", str);
 		char spz1[3] = { str[0], str[1], '\0' };
-		for (int i = 0; i < *count; i++)
+		for (int i = 0; i < *countDrivers; i++)
 		{
 			char spz[3] = { drivers[i]->plate[0], drivers[i]->plate[1], '\0' };
 			if (drivers[i]->sumOfFine < n && strcmp(spz1, spz) == 0) {
-				for (int j = i; j < *count - 1; j++)
+				for (int j = i; j < *countDrivers - 1; j++)
 				{
 					strcpy(drivers[j]->name, drivers[j + 1]->name);
 					drivers[j]->sex = drivers[j + 1]->sex;
@@ -243,8 +243,8 @@ driver_t** n(driver_t** drivers, int* count) {
 					drivers[j]->sumOfFine = drivers[j + 1]->sumOfFine;
 					strcpy(drivers[j]->dateOfFine, drivers[j + 1]->dateOfFine);
 				}
-				free(drivers[*count - 1]);
-				(*count)--;
+				free(drivers[*countDrivers - 1]);
+				(*countDrivers)--;
 			}
 		}
 	}
@@ -253,25 +253,25 @@ driver_t** n(driver_t** drivers, int* count) {
 }
 
 //function for Test2 s(h)
-void s(driver_t** drivers, int* count) {
+void s(driver_t** drivers, int* countDrivers) {
 	if (drivers != NULL) {
-		char *x;
+		char *charKey;
 		int *amount;
 		amount = (int*)malloc(2 * sizeof(int));
-		x = (char*)malloc(27 * sizeof(char));
-		x[0] = drivers[0]->plate[0];
+		charKey = (char*)malloc(27 * sizeof(char));
+		charKey[0] = drivers[0]->plate[0];
 		amount[0] = 0;
 		int length = 1;
-		for (int i = 0; i < *count; i++)
+		for (int i = 0; i < *countDrivers; i++)
 		{
 			bool flag1 = false, flag2 = false, flag3 = false;
 			for (int j = 0; j < length; j++)
 			{
-				if (x[j] == drivers[i]->plate[0]) {
+				if (charKey[j] == drivers[i]->plate[0]) {
 					amount[j]++;
 					flag1 = true;
 				}
-				if (x[j] == drivers[i]->plate[1]) {
+				if (charKey[j] == drivers[i]->plate[1]) {
 					amount[j]++;
 					flag2 = true;
 				}
@@ -281,63 +281,63 @@ void s(driver_t** drivers, int* count) {
 				}
 			}
 			if (!flag1) {
-				realloc(x, ++length);
-				x[length - 1] = drivers[i]->plate[0];
-				int *pa = (int*)malloc((length + 1) * sizeof(int));
+				realloc(charKey, ++length);
+				charKey[length - 1] = drivers[i]->plate[0];
+				int *paTemp = (int*)malloc((length + 1) * sizeof(int));
 				for (int k = 0; k < length - 1; k++)
-					pa[k] = amount[k];
-				pa[length - 1] = 1;
+					paTemp[k] = amount[k];
+				paTemp[length - 1] = 1;
 				if (flag3)
-					pa[length - 1]++;
+					paTemp[length - 1]++;
 				free(amount);
 				amount = (int*)malloc((length + 1) * sizeof(int));
 				for (int k = 0; k < length; k++)
-					amount[k] = pa[k];
-				free(pa);
+					amount[k] = paTemp[k];
+				free(paTemp);
 			}
 			if (!flag2) {
-				realloc(x, ++length);
-				x[length - 1] = drivers[i]->plate[1];
-				int *pa = (int*)malloc((length + 1) * sizeof(int));
+				realloc(charKey, ++length);
+				charKey[length - 1] = drivers[i]->plate[1];
+				int *paTemp = (int*)malloc((length + 1) * sizeof(int));
 				for (int k = 0; k < length - 1; k++)
-					pa[k] = amount[k];
-				pa[length - 1] = 1;
+					paTemp[k] = amount[k];
+				paTemp[length - 1] = 1;
 				free(amount);
 				amount = (int*)malloc((length + 1) * sizeof(int));
 				for (int k = 0; k < length; k++)
-					amount[k] = pa[k];
-				free(pa);
+					amount[k] = paTemp[k];
+				free(paTemp);
 			}
 		}
 
 		//bubble sorting by alphabet
 		for (int k = 1; k < length; k++)
 			for (int j = 0; j < length - k; j++)
-				if (x[j]>x[j + 1]) {
-					char t = x[j];
-					x[j] = x[j + 1];
-					x[j + 1] = t;
+				if (charKey[j]>charKey[j + 1]) {
+					char t = charKey[j];
+					charKey[j] = charKey[j + 1];
+					charKey[j + 1] = t;
 				}
 
 		for (int i = 0; i < length; i++)
 		{
-			printf("%c:%d\n", x[i], amount[i]);
+			printf("%c:%d\n", charKey[i], amount[i]);
 		}
 		printf("\n");
-		free(x);
+		free(charKey);
 		free(amount);
 	}
 }
 
-void k(driver_t** drivers, FILE**f, int* count) {
+void k(driver_t** drivers, FILE**f, int* countDrivers) {
 	//file closing
 	if (*f != NULL) 
 		fclose(*f); 
 	//array cleaning
 	if (drivers != NULL) {
-		for (int i = 0; i < *count; i++)
+		for (int i = 0; i < *countDrivers; i++)
 			free(drivers[i]);
-		*count = 0;
+		*countDrivers = 0;
 	}
 	system("pause");
 	exit(0);
@@ -346,37 +346,37 @@ void k(driver_t** drivers, FILE**f, int* count) {
 int main() {
 	FILE* f = NULL;
 	driver_t** drivers = NULL;
-	int count = 0;
+	int countDrivers = 0;
 	char c;
 	while (true) {
 		scanf_s("%c", &c);
 		switch (c) {
 		case 'o':
-			drivers = o(drivers, &f, &count);
-			break;
-		case 'r':
-			r(drivers, &count);
-			break;
-		case 'k':
-			k(drivers, &f, &count);
-			break;
-		case 'x':
-			x(drivers, &count);
-			break;
-		case 'p':
-			p(drivers, &count);
-			break;
-		case 'v':
-			v(drivers, &count);
+			drivers = o(drivers, &f, &countDrivers);
 			break;
 		case 'a':
-			drivers = a(drivers, &count);
+			drivers = a(drivers, &countDrivers);
+			break;
+		case 'v':
+			v(drivers, &countDrivers);
+			break;
+		case 'r':
+			r(drivers, &countDrivers);
+			break;
+		case 'k':
+			k(drivers, &f, &countDrivers);
+			break;
+		case 'x':
+			x(drivers, &countDrivers);
+			break;
+		case 'p':
+			p(drivers, &countDrivers);
 			break;
 		case 'c':
-			drivers = n(drivers, &count);
+			drivers = n(drivers, &countDrivers);
 			break;
 		case 's':
-			s(drivers, &count);
+			s(drivers, &countDrivers);
 			break;
 		default:
 			break;
